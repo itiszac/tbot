@@ -1,11 +1,15 @@
 {
-  "name": "twitter-bot",
+  "name": "tbot.js",
   "version": "1.0.0",
   "description": "A twitter bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js"
   },
   "author": "absence",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "twit": "^2.2.11"
+  }
 }
