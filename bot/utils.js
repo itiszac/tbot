@@ -30,13 +30,16 @@ var obj = {
   },
   getRandomNum: (min, max) => {
     let num;
+    // looping because the first num generated is always the same..
     for (let i = 0; i < 25; i++)
       num = Math.floor(Math.random() * (max - min + 1) + min);
     return num;
   },
   getHashtag: () => {
+    // check if hashtags json contains a hashtag category
     if (data.length > 0) {
       let num = obj.getRandomNum(0, data.length - 1);
+      // check if hashtag category contains has a hashtag
       if (data[num].hashtags.length > 0) {
         let hashtag_index = obj.getRandomNum(0, data[num].hashtags.length - 1);
         return data[num].hashtags[hashtag_index];

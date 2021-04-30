@@ -6,12 +6,13 @@ const {
 } = require("../friends");
 const { getTweets, like } = require("../tweet");
 const { getHashtag, getRandomNum, timeout } = require("../utils");
+const {BASE_TIMEOUT} = require("../constants");
 
 var newly_followed = [];
 var last_liked_id = "";
 
 const likePosts = async (ht) => {
-  const num = getRandomNum(1, 3);
+  const num = getRandomNum(Number(process.env.MIN_ACTIONS), Number(process.env.MAX_ACTIONS));
   const data = await getTweets(ht, num);
   const tweets = data.statuses;
   for await (let tweet of tweets) {
@@ -20,7 +21,7 @@ const likePosts = async (ht) => {
         console.log("Already liked the most current post...");
         return;
       }
-      await timeout(2500);
+      await timeout(BASE_TIMEOUT);
       await like(tweet.id_str);
       last_liked_id = tweet.id_str;
       console.log("Liked this tweet: " + tweet.id_str);
@@ -31,12 +32,12 @@ const likePosts = async (ht) => {
 };
 
 const followUsers = async (ht, screen_name) => {
-  const num = getRandomNum(1, 3);
+  const num = getRandomNum(Number(process.env.MIN_ACTIONS), Number(process.env.MAX_ACTIONS));
   const data = await getTweets(ht, num);
   const tweets = data.statuses;
   for await (let tweet of tweets) {
     try {
-      await timeout(2500);
+      await timeout(BASE_TIMEOUT);
       if (newly_followed.length > 25) {
         // only following 25 people every 24 hours for now..
         await timeout(60000);
@@ -57,11 +58,11 @@ const followUsers = async (ht, screen_name) => {
 
 const unfollowUsers = async (screen_name) => {
   const followers = await getFollowers(screen_name);
-  var i = getRandomNum(0, 4);
+  var i = getRandomNum(Number(process.env.MIN_ACTIONS), Number(process.env.MAX_ACTIONS));
   for await (let follower of followers.users) {
     try {
       if (i < 0) break;
-      await timeout(3000);
+      await timeout(BASE_TIMEOUT);
       const friend = await relationship(screen_name, follower.screen_name);
       if (
         friend.relationship.source.followed_by === true ||
@@ -94,9 +95,11 @@ module.exports = {
         case 1:
           {
             // follow user
-            let ht = getHashtag();
-            console.log("Following users posting in:", ht);
-            followUsers(ht, process.env.MY_TWITTER_HANDLE);
+            // let ht = getHashtag();
+            // console.log("Following users posting in:", ht);
+            // followUsers(ht, process.env.MY_TWITTER_HANDLE);
+            // just gonna make this another random timeout for now
+            await timeout(getRandomNum(150000, 600000));
           }
           break;
         case 2:
