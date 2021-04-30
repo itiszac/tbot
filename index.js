@@ -18,6 +18,6 @@ async function main() {
   }
 }
 
-console.log("Starting sesh.. a dumbass Twitter bot...");
+console.log("Starting tbot.. a dumbass Twitter bot...");
 
 main();
